@@ -1,39 +1,90 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import index from './index';
+import Calls from './Calls';
+import Tools from './Tools';
+import Updates from './Updates';
+import Fontisto from '@expo/vector-icons/Fontisto';
+import Feather from '@expo/vector-icons/Feather';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+const Tabs = createBottomTabNavigator();
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
-
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
+const RootLayout = () => {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
+    <>
       <StatusBar style="auto" />
-    </ThemeProvider>
+      <Tabs.Navigator
+        screenOptions={{
+          tabBarStyle: {
+            backgroundColor: '#000',
+            elevation: 5,
+          },
+        }}
+      >
+        <Tabs.Screen
+          name="index"
+          component={index}
+          options={{
+            title: 'Chats',
+            headerStyle: {
+              backgroundColor: '#000',
+              height: 0,
+            },
+            headerTintColor: 'white',
+            tabBarIcon: ({ color }) => (
+              <Fontisto name="hipchat" size={24} color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="Calls"
+          component={Calls}
+          options={{
+            title: 'Calls',
+            headerStyle: {
+              backgroundColor: '#000',
+              height: 0,
+            },
+            headerTintColor: 'white',
+            tabBarIcon: ({ color }) => (
+              <Feather name="phone-call" size={24} color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="Update"
+          component={Updates}
+          options={{
+            title: 'Updates',
+            headerStyle: {
+              backgroundColor: '#000',
+              height: 0,
+            },
+            headerTintColor: 'white',
+            tabBarIcon: ({ color }) => (
+              <Feather name="bell" size={24} color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="Tools"
+          component={Tools}
+          options={{
+            title: 'Tools',
+            headerStyle: {
+              backgroundColor: '#000',
+              height: 0,
+            },
+            headerTintColor: 'white',
+            tabBarIcon: ({ color }) => (
+              <Feather name="settings" size={24} color={color} />
+            ),
+          }}
+        />
+      </Tabs.Navigator>
+    </>
   );
-}
+};
+
+export default RootLayout;
